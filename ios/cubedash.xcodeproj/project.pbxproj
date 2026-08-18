@@ -9,8 +9,15 @@
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-cubedash.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-cubedash.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		3E6137CE9AE617E82176B6B0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		CD5000F11E00000000000002 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = CD5000F11E00000000000001 /* click.wav */; };
+		CD5001F11E00000000000102 /* coin.wav in Resources */ = {isa = PBXBuildFile; fileRef = CD5001F11E00000000000101 /* coin.wav */; };
+		CD5002F11E00000000000202 /* complete.wav in Resources */ = {isa = PBXBuildFile; fileRef = CD5002F11E00000000000201 /* complete.wav */; };
+		CD5003F11E00000000000302 /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = CD5003F11E00000000000301 /* explosion.wav */; };
+		CD5004F11E00000000000402 /* jump.wav in Resources */ = {isa = PBXBuildFile; fileRef = CD5004F11E00000000000401 /* jump.wav */; };
+		CD5005F11E00000000000502 /* star.wav in Resources */ = {isa = PBXBuildFile; fileRef = CD5005F11E00000000000501 /* star.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +30,12 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-cubedash.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cubedash.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = cubedash/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = cubedash/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CD5000F11E00000000000001 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = click.wav; path = ../assets/sounds/click.wav; sourceTree = "<group>"; };
+		CD5001F11E00000000000101 /* coin.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = coin.wav; path = ../assets/sounds/coin.wav; sourceTree = "<group>"; };
+		CD5002F11E00000000000201 /* complete.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = complete.wav; path = ../assets/sounds/complete.wav; sourceTree = "<group>"; };
+		CD5003F11E00000000000301 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = explosion.wav; path = ../assets/sounds/explosion.wav; sourceTree = "<group>"; };
+		CD5004F11E00000000000401 /* jump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = jump.wav; path = ../assets/sounds/jump.wav; sourceTree = "<group>"; };
+		CD5005F11E00000000000501 /* star.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = star.wav; path = ../assets/sounds/star.wav; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -46,6 +59,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				CD50FFF11E00000000000000 /* Sounds */,
 			);
 			name = cubedash;
 			sourceTree = "<group>";
@@ -95,6 +109,19 @@
 				5709B34CF0A7D63546082F79 /* Pods-cubedash.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		CD50FFF11E00000000000000 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				CD5000F11E00000000000001 /* click.wav */,
+				CD5001F11E00000000000101 /* coin.wav */,
+				CD5002F11E00000000000201 /* complete.wav */,
+				CD5003F11E00000000000301 /* explosion.wav */,
+				CD5004F11E00000000000401 /* jump.wav */,
+				CD5005F11E00000000000501 /* star.wav */,
+			);
+			name = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,6 +186,13 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				CD5000F11E00000000000002 /* click.wav in Resources */,
+				CD5001F11E00000000000102 /* coin.wav in Resources */,
+				CD5002F11E00000000000202 /* complete.wav in Resources */,
+				CD5003F11E00000000000302 /* explosion.wav in Resources */,
+				CD5004F11E00000000000402 /* jump.wav in Resources */,
+				CD5005F11E00000000000502 /* star.wav in Resources */,
+				3E6137CE9AE617E82176B6B0 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,6 +404,10 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -377,8 +415,14 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
+				PODFILE_DIR = "$(SRCROOT)";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -435,6 +479,10 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -442,8 +490,13 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
+				PODFILE_DIR = "$(SRCROOT)";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
