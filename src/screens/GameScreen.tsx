@@ -24,6 +24,7 @@ import {
 } from '../game/constants';
 import { useProgress } from '../store/ProgressContext';
 import { SoundManager } from '../audio/SoundManager';
+import GameOverBanner from '../ads/GameOverBanner';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Game'>;
 
@@ -230,6 +231,7 @@ export default function GameScreen({ navigation, route }: Props) {
             <Btn label="RETRY" onPress={retry} />
             <Btn label="HOME" variant="secondary" onPress={goHome} />
           </Animated.View>
+          <GameOverBanner />
         </View>
       )}
 
