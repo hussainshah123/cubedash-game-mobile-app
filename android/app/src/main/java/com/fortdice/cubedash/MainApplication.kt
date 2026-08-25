@@ -1,4 +1,4 @@
-package com.cubedash
+package com.fortdice.cubedash
 
 import android.app.Application
 import com.facebook.react.PackageList

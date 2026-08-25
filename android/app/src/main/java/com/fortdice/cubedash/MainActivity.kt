@@ -1,4 +1,4 @@
-package com.cubedash
+package com.fortdice.cubedash
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

@@ -2,8 +2,8 @@
   "name": "cubedash",
   "displayName": "cubedash",
   "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-9318693466829633~8397483853",
-    "ios_app_id": "ca-app-pub-9318693466829633~8397483853",
+    "android_app_id": "ca-app-pub-4687548663016677~4944924626",
+    "ios_app_id": "ca-app-pub-4687548663016677~4944924626",
     "user_tracking_usage_description": "This identifier will be used to deliver personalized ads to you.",
     "sk_ad_network_items": [
       "cstr6suwn9.skadnetwork",
