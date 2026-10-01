@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
@@ -9,6 +9,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useInterstitialAd } from 'react-native-google-mobile-ads';
 
 import type { RootStackParamList } from '../navigation/types';
 import GameCanvas, { EngineHandles } from '../components/game/GameCanvas';
@@ -24,7 +25,10 @@ import {
 } from '../game/constants';
 import { useProgress } from '../store/ProgressContext';
 import { SoundManager } from '../audio/SoundManager';
-import GameOverBanner from '../ads/GameOverBanner';
+import BannerAdView from '../ads/BannerAdView';
+import { INTERSTITIAL_UNIT_ID } from '../ads/adUnits';
+
+const DEATHS_PER_INTERSTITIAL = 3;
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Game'>;
 
@@ -45,6 +49,14 @@ export default function GameScreen({ navigation, route }: Props) {
   const [phase, setPhase] = useState<Phase>('ready');
   const [result, setResult] = useState<RunResult | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const deathCount = useRef(0);
+  const pendingAfterAd = useRef<(() => void) | null>(null);
+  const {
+    isLoaded: interstitialLoaded,
+    isClosed: interstitialClosed,
+    load: loadInterstitial,
+    show: showInterstitial,
+  } = useInterstitialAd(INTERSTITIAL_UNIT_ID);
 
   const data = useMemo(() => generateLevel(level), [level]);
   const theme = THEMES[data.world];
@@ -113,6 +125,31 @@ export default function GameScreen({ navigation, route }: Props) {
     setPhase('ready');
     setRunKey(k => k + 1);
   }, [paused, scoreText, coinText, progress]);
+
+  // preload an interstitial so it's ready the moment a gated retry needs it
+  useEffect(() => {
+    loadInterstitial();
+  }, [loadInterstitial]);
+
+  useEffect(() => {
+    if (interstitialClosed && pendingAfterAd.current) {
+      const run = pendingAfterAd.current;
+      pendingAfterAd.current = null;
+      run();
+      loadInterstitial();
+    }
+  }, [interstitialClosed, loadInterstitial]);
+
+  const retryFromDeath = useCallback(() => {
+    deathCount.current += 1;
+    const dueForAd = deathCount.current % DEATHS_PER_INTERSTITIAL === 0;
+    if (dueForAd && interstitialLoaded) {
+      pendingAfterAd.current = retry;
+      showInterstitial();
+    } else {
+      retry();
+    }
+  }, [interstitialLoaded, showInterstitial, retry]);
 
   const goHome = useCallback(() => navigation.popToTop(), [navigation]);
 
@@ -228,10 +265,10 @@ export default function GameScreen({ navigation, route }: Props) {
               <View style={styles.coinIcon} />
               <Text style={styles.coinEarned}>+{result.coins}</Text>
             </View>
-            <Btn label="RETRY" onPress={retry} />
+            <Btn label="RETRY" onPress={retryFromDeath} />
             <Btn label="HOME" variant="secondary" onPress={goHome} />
           </Animated.View>
-          <GameOverBanner />
+          <BannerAdView style={styles.banner} />
         </View>
       )}
 
@@ -451,5 +488,8 @@ const styles = StyleSheet.create({
   },
   starDim: {
     color: '#3a4270',
+  },
+  banner: {
+    marginTop: 16,
   },
 });

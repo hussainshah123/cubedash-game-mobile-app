@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useRewardedAd } from 'react-native-google-mobile-ads';
 
 import type { RootStackParamList } from '../navigation/types';
 import MenuBackground from '../components/MenuBackground';
@@ -16,12 +17,50 @@ import { useProgress } from '../store/ProgressContext';
 import { SKINS } from '../game/skins';
 import { UI } from '../theme/themes';
 import { SoundManager } from '../audio/SoundManager';
+import { REWARDED_UNIT_ID } from '../ads/adUnits';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Skins'>;
 
 export default function SkinsScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
-  const { coins, unlockedSkins, selectedSkin, buySkin } = useProgress();
+  const { coins, unlockedSkins, selectedSkin, buySkin, unlockSkin } =
+    useProgress();
+
+  const [pendingAdSkin, setPendingAdSkin] = useState<string | null>(null);
+  const {
+    isLoaded: rewardedLoaded,
+    isEarnedReward,
+    isClosed: rewardedClosed,
+    load: loadRewarded,
+    show: showRewarded,
+  } = useRewardedAd(REWARDED_UNIT_ID);
+
+  useEffect(() => {
+    loadRewarded();
+  }, [loadRewarded]);
+
+  useEffect(() => {
+    if (isEarnedReward && pendingAdSkin) {
+      unlockSkin(pendingAdSkin);
+      SoundManager.play('coin');
+      setPendingAdSkin(null);
+    }
+  }, [isEarnedReward, pendingAdSkin, unlockSkin]);
+
+  useEffect(() => {
+    if (rewardedClosed) {
+      loadRewarded();
+    }
+  }, [rewardedClosed, loadRewarded]);
+
+  const watchAdToUnlock = useCallback(
+    (skinId: string) => {
+      if (!rewardedLoaded) return;
+      setPendingAdSkin(skinId);
+      showRewarded();
+    },
+    [rewardedLoaded, showRewarded],
+  );
 
   return (
     <View style={styles.root}>
@@ -84,24 +123,38 @@ export default function SkinsScreen({ navigation }: Props) {
                     <Text style={styles.tagText}>OWNED</Text>
                   </View>
                 ) : (
-                  <View style={[styles.tag, styles.tagCost]}>
-                    <View style={styles.coinIconSmall} />
-                    <Text
-                      style={[
-                        styles.tagText,
-                        !affordable && styles.tagTextDim,
+                  <>
+                    <View style={[styles.tag, styles.tagCost]}>
+                      <View style={styles.coinIconSmall} />
+                      <Text
+                        style={[
+                          styles.tagText,
+                          !affordable && styles.tagTextDim,
+                        ]}
+                      >
+                        {skin.cost}
+                      </Text>
+                    </View>
+                    <Pressable
+                      onPress={() => watchAdToUnlock(skin.id)}
+                      disabled={!rewardedLoaded}
+                      style={({ pressed }) => [
+                        styles.tag,
+                        styles.tagAd,
+                        !rewardedLoaded && styles.dim,
+                        { transform: [{ scale: pressed ? 0.95 : 1 }] },
                       ]}
                     >
-                      {skin.cost}
-                    </Text>
-                  </View>
+                      <Text style={styles.tagText}>🎬 FREE</Text>
+                    </Pressable>
+                  </>
                 )}
               </Pressable>
             );
           })}
         </View>
         <Text style={styles.hint}>
-          Collect coins in levels to unlock new skins
+          Collect coins in levels, or watch an ad to unlock a skin for free
         </Text>
       </ScrollView>
     </View>
@@ -218,6 +271,9 @@ const styles = StyleSheet.create({
   },
   tagCost: {
     backgroundColor: '#ffcf4d1f',
+  },
+  tagAd: {
+    backgroundColor: '#00e0b026',
   },
   tagText: {
     color: UI.text,

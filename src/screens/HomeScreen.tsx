@@ -15,6 +15,7 @@ import type { RootStackParamList } from '../navigation/types';
 import MenuBackground from '../components/MenuBackground';
 import CubePreview from '../components/CubePreview';
 import Btn from '../components/Btn';
+import BannerAdView from '../ads/BannerAdView';
 import { useProgress } from '../store/ProgressContext';
 import { getSkin } from '../game/skins';
 import { TOTAL_LEVELS } from '../game/constants';
@@ -99,6 +100,8 @@ export default function HomeScreen({ navigation }: Props) {
           />
         </View>
       </View>
+
+      <BannerAdView style={[styles.banner, { bottom: insets.bottom + 10 }]} />
     </View>
   );
 }
@@ -169,5 +172,10 @@ const styles = StyleSheet.create({
     marginTop: 44,
     gap: 14,
     width: 260,
+  },
+  banner: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
   },
 });

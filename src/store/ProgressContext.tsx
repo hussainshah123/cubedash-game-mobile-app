@@ -30,6 +30,7 @@ interface ProgressApi extends ProgressState {
   totalStars: number;
   addCoins: (n: number) => void;
   buySkin: (id: string) => boolean;
+  unlockSkin: (id: string) => void;
   selectSkin: (id: string) => void;
   reportRun: (level: number, score: number, stars: number) => void;
   setSoundOn: (on: boolean) => void;
@@ -117,6 +118,23 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     [update],
   );
 
+  // grants a skin for free, used after the player earns a rewarded-ad reward
+  const unlockSkin = useCallback(
+    (id: string) => {
+      if (!SKINS.some(s => s.id === id)) return;
+      update(prev =>
+        prev.unlockedSkins.includes(id)
+          ? { ...prev, selectedSkin: id }
+          : {
+              ...prev,
+              unlockedSkins: [...prev.unlockedSkins, id],
+              selectedSkin: id,
+            },
+      );
+    },
+    [update],
+  );
+
   const selectSkin = useCallback(
     (id: string) => {
       update(prev =>
@@ -172,6 +190,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       totalStars,
       addCoins,
       buySkin,
+      unlockSkin,
       selectSkin,
       reportRun,
       setSoundOn,
@@ -182,6 +201,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     ready,
     addCoins,
     buySkin,
+    unlockSkin,
     selectSkin,
     reportRun,
     setSoundOn,

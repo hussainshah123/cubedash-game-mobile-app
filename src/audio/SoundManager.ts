@@ -35,17 +35,30 @@ class SoundManagerImpl {
   init() {
     if (this.loaded) return;
     this.loaded = true;
-    Sound.setCategory('Ambient', true);
+    // iOS only: picks the AVAudioSession category. On Android this same
+    // call instead remaps every Sound's stream to STREAM_NOTIFICATION,
+    // which goes silent whenever the device's notification volume is
+    // muted — so it must stay off the Android code path entirely.
+    if (Platform.OS === 'ios') {
+      Sound.setCategory('Ambient', true);
+    }
     (Object.keys(FILES) as SfxName[]).forEach(name => {
       const file = FILES[name];
+      const onError = (err: unknown) => {
+        if (!err) {
+          s.setVolume(VOLUMES[name]);
+        } else {
+          console.warn(`[SoundManager] failed to load ${file}:`, err);
+        }
+      };
+      // Android resolves bare filenames against res/raw by passing no
+      // basePath — passing the callback there instead (as this used to)
+      // makes the library treat the callback itself as the basePath,
+      // corrupting the filename and silently failing to load every sound.
       const s =
         Platform.OS === 'ios'
-          ? new Sound(file, Sound.MAIN_BUNDLE, err => {
-              if (!err) s.setVolume(VOLUMES[name]);
-            })
-          : new Sound(file, err => {
-              if (!err) s.setVolume(VOLUMES[name]);
-            });
+          ? new Sound(file, Sound.MAIN_BUNDLE, onError)
+          : new Sound(file, undefined, onError);
       this.sounds.set(name, s);
     });
   }

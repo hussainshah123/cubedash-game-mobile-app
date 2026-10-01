@@ -1,13 +1,17 @@
 import React, { useRef } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View, ViewStyle, StyleProp } from 'react-native';
 import {
   BannerAd,
   BannerAdSize,
   useForeground,
 } from 'react-native-google-mobile-ads';
-import { GAME_OVER_BANNER_UNIT_ID } from './adUnits';
+import { BANNER_UNIT_ID } from './adUnits';
 
-export default function GameOverBanner() {
+interface Props {
+  style?: StyleProp<ViewStyle>;
+}
+
+export default function BannerAdView({ style }: Props) {
   const bannerRef = useRef<BannerAd>(null);
 
   useForeground(() => {
@@ -17,10 +21,10 @@ export default function GameOverBanner() {
   });
 
   return (
-    <View style={styles.wrap}>
+    <View style={[styles.wrap, style]}>
       <BannerAd
         ref={bannerRef}
-        unitId={GAME_OVER_BANNER_UNIT_ID}
+        unitId={BANNER_UNIT_ID}
         size={BannerAdSize.LARGE_ANCHORED_ADAPTIVE_BANNER}
       />
     </View>
@@ -29,7 +33,6 @@ export default function GameOverBanner() {
 
 const styles = StyleSheet.create({
   wrap: {
-    marginTop: 16,
     alignItems: 'center',
   },
 });
