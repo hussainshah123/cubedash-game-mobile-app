@@ -25,10 +25,10 @@ import {
 } from '../game/constants';
 import { useProgress } from '../store/ProgressContext';
 import { SoundManager } from '../audio/SoundManager';
-import BannerAdView from '../ads/BannerAdView';
 import { INTERSTITIAL_UNIT_ID } from '../ads/adUnits';
 
-const DEATHS_PER_INTERSTITIAL = 3;
+// full-screen ad after every 2nd lose → retry
+const DEATHS_PER_INTERSTITIAL = 2;
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Game'>;
 
@@ -142,8 +142,11 @@ export default function GameScreen({ navigation, route }: Props) {
 
   const retryFromDeath = useCallback(() => {
     deathCount.current += 1;
-    const dueForAd = deathCount.current % DEATHS_PER_INTERSTITIAL === 0;
+    // counter only resets once an ad actually shows, so if the ad wasn't
+    // loaded yet it fires on the next retry instead of being skipped
+    const dueForAd = deathCount.current >= DEATHS_PER_INTERSTITIAL;
     if (dueForAd && interstitialLoaded) {
+      deathCount.current = 0;
       pendingAfterAd.current = retry;
       showInterstitial();
     } else {
@@ -268,7 +271,6 @@ export default function GameScreen({ navigation, route }: Props) {
             <Btn label="RETRY" onPress={retryFromDeath} />
             <Btn label="HOME" variant="secondary" onPress={goHome} />
           </Animated.View>
-          <BannerAdView style={styles.banner} />
         </View>
       )}
 
@@ -488,8 +490,5 @@ const styles = StyleSheet.create({
   },
   starDim: {
     color: '#3a4270',
-  },
-  banner: {
-    marginTop: 16,
   },
 });
